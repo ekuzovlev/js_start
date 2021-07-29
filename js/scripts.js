@@ -1,14 +1,14 @@
-let money = 1000;
+let money;
 
-let income = 200; 
+let income; 
 
-let addExpenses = 100; 
+let addExpenses; 
 
-let deposit = 300;
+let deposit;
 
-let mission = 'books';
+let mission;
 
-let period = '29.07.2021';
+let period;
 
 alert('Hello World!');
 
