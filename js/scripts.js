@@ -39,8 +39,7 @@ let budgetMonth = money - amount1 - amount2;
 console.log('Бюджет на месяц:', budgetMonth);
 
 // Зная budgetMonth, посчитать за сколько месяцев будет достигнута цель mission, вывести в консоль, округляя в большую сторону (методы объекта Math в помощь)
-let targetMission = Math.ceil(mission / budgetMonth);
-console.log(`Цель будет достигнута за ${targetMission} месяцев(-а)`);
+console.log(`Цель будет достигнута за ${Math.ceil(mission / budgetMonth)} месяцев(-а)`);
 
 // Поправить budgetDay учитывая бюджет на месяц, а не месячный доход. Вывести в консоль  округлив в меньшую сторону
 let budgetDay = Math.floor(budgetMonth / 30);
