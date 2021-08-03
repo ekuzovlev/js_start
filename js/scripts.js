@@ -1,63 +1,73 @@
-// Спрашиваем у пользователя “Ваш месячный доход?” и результат сохраняем в переменную money
+'use strict';
+
 let money = Number(prompt('Ваш месячный доход?'));
 
 let income = 'фриланс';
 
-// Спросить у пользователя “Перечислите возможные расходы за рассчитываемый период через запятую” сохранить в переменную addExpenses (пример: "Квартплата, проездной, кредит")
 let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
 
-// Спросить у пользователя “Есть ли у вас депозит в банке?” и сохранить данные в переменной deposit (булево значение true/false)
 let deposit = confirm('Есть ли у вас депозит в банке?');
 
 let mission = 1e6;
 
 let period = 6;
 
+// вызовы функции showTypeOf
 console.log(typeof(money));
 console.log(typeof(income));
 console.log(typeof(deposit));
 
-console.log(addExpenses.length);
-
-console.log(`Период равен ${period} месяцев`);
-console.log(`Цель заработать ${mission} рублей`);
-
+// Вывод возможных расходов в виде массива (addExpenses)
 console.log(addExpenses.toLowerCase().split(', '));
 
-// Спросить у пользователя по 2 раза каждый вопрос и записать ответы в разные переменные
-// “Введите обязательную статью расходов?” (например expenses1, expenses2)
-// “Во сколько это обойдется?” (например amount1, amount2)
-// в итоге 4 вопроса и 4 разные переменных
 let expenses1 = prompt('Введите обязательную статью расходов?');
 let amount1 = Number(prompt('Во сколько это обойдется?'));
 
 let expenses2 = prompt('Введите обязательную статью расходов?');
 let amount2 = Number(prompt('Во сколько это обойдется?'));
 
-// Вычислить бюджет на месяц, учитывая обязательные расходы, сохранить в новую переменную budgetMonth и вывести результат в консоль
-let budgetMonth = money - amount1 - amount2;
-console.log('Бюджет на месяц:', budgetMonth);
+// Объявить функцию getExpensesMonth. Функция возвращает сумму всех обязательных расходов за месяц
+function getExpensesMonth(amount1, amount2){
+  return amount1 + amount2;
+}
 
-// Зная budgetMonth, посчитать за сколько месяцев будет достигнута цель mission, вывести в консоль, округляя в большую сторону (методы объекта Math в помощь)
-console.log(`Цель будет достигнута за ${Math.ceil(mission / budgetMonth)} месяцев(-а)`);
+// Расходы за месяц вызов getExpensesMonth
+console.log('Расходы за месяц:', getExpensesMonth(amount1, amount2));
 
-// Поправить budgetDay учитывая бюджет на месяц, а не месячный доход. Вывести в консоль  округлив в меньшую сторону
-let budgetDay = Math.floor(budgetMonth / 30);
+// Объявить функцию getAccumulatedMonth. Функция возвращает Накопления за месяц (Доходы минус расходы)
+function getAccumulatedMonth (income, expenses){
+  return income - expenses;
+}
+
+// Объявить переменную accumulatedMonth и присвоить ей результат вызова функции getAccumulatedMonth
+let accumulatedMonth = getAccumulatedMonth(money, getExpensesMonth(amount1, amount2));
+
+// Объявить функцию getTargetMonth. Подсчитывает за какой период будет достигнута цель, зная
+// результат месячного накопления (accumulatedMonth) и возвращает результат
+function getTargetMonth(mission, accumulatedMonth){
+  return Math.ceil(mission / accumulatedMonth);
+}
+
+// Cрок достижения цели в месяцах (результат вызова функции getTargetMonth)
+console.log(`Цель будет достигнута за ${getTargetMonth(mission, accumulatedMonth)} месяцев(-а)`);
+
+// budgetDay высчитываем исходя из значения месячного накопления (accumulatedMonth)
+let budgetDay = Math.floor(accumulatedMonth / 30);
+
+// Бюджет на день (budgetDay)
 console.log('Бюджет на день:', budgetDay);
 
-// Написать конструкцию условий (расчеты приведены в рублях)
-// Если budgetDay больше 1200, то “У вас высокий уровень дохода”
-// Если budgetDay больше 600 и меньше 1200, то сообщение “У вас средний уровень дохода”
-// Если budgetDay меньше 600 и больше 0 то в консоль вывести сообщение “К сожалению у вас уровень дохода ниже среднего”
-// Если отрицательное значение то вывести “Что то пошло не так”
-// Учесть варианты 0, 600 и 1200 (к какому уровню не важно)
-
+let getStatusIncome = function(){
   if (budgetDay >= 1200) {
-    console.log('У вас высокий уровень дохода');
+    return ('У вас высокий уровень дохода');
   } else if (budgetDay >= 600 && budgetDay < 1200) {
-    console.log('У вас cредний уровень дохода');
+    return ('У вас cредний уровень дохода');
   } else if (budgetDay >= 0 && budgetDay < 600) {
-    console.log('К сожалению у вас уровень дохода ниже среднего');
+    return ('К сожалению у вас уровень дохода ниже среднего');
   } else {
-    console.log('Что-то пошло не так');
+    return ('Что-то пошло не так');
   }
+};
+
+// вызов функции getStatusIncome
+console.log(getStatusIncome());
