@@ -5,27 +5,33 @@ let isNumber = function(n) {
 };
 
 let money,
-    income = 'фриланс',
-    addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую'),
-    deposit = confirm('Есть ли у вас депозит в банке?'),
-    mission = 1e6,
-    period = 6;
-
-// Переписать функцию start циклом do while
-let start = function() {
-  do {
-    money = prompt('Ваш месячный доход?');
-  } while (!isNumber(money));
-  money = +money;
-};
+    start = function() {
+      do {
+        money = prompt('Ваш месячный доход?');
+      } while (!isNumber(money));
+        money = +money;
+    };
 
 start();
 
-console.log(typeof(money));
-console.log(typeof(income));
-console.log(typeof(deposit));
+let appData = {
+  income: {},
+  addIncome: [],
+  expenses: {},
+  addExpenses: [],
+  deposit: false,
+  mission: 1e6,
+  period: 3,
+  asking: function(){
+    let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+        appData.addExpenses = addExpenses.toLowerCase().split(', ');
+        appData.deposit = confirm('Есть ли у вас депозит в банке?');
+  }
+};
 
-console.log(addExpenses.toLowerCase().split(', '));
+console.log(typeof(money));
+console.log(typeof(appData.income));
+console.log(typeof(appData.deposit));
 
 let expenses = [];
 
@@ -68,7 +74,7 @@ function getTargetMonth(mission, accumulatedMonth){
   }
 }
 
-console.log(getTargetMonth(mission, accumulatedMonth));
+console.log(getTargetMonth(appData.mission, accumulatedMonth));
 
 let budgetDay = Math.floor(accumulatedMonth / 30);
 
