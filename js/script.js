@@ -20,7 +20,8 @@ let start = document.getElementById('start'),
     expensesTitle = document.querySelector('.expenses-title'),
     expensesItems = document.querySelectorAll('.expenses-items'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
-    periodSelect = document.querySelector('.period-select'),
+    periodSelect = document.getElementsByClassName('period-select')[0],
+    periodAmount = document.getElementsByClassName('period-amount')[0],
     targetAmount = document.querySelector('.target-amount'),
     incomeItem = document.querySelectorAll('.income-items');
 
@@ -52,10 +53,6 @@ let appData = {
   percentDeposit: 0,
   moneyDeposit: 0,
   start: function () {
-    if (salaryAmount.value === '') {
-      alert('Поле "Месячный доход" дложно быть заполнено!');
-      return;
-    }
     appData.budget = +salaryAmount.value;
     appData.getExpenses();
     appData.getIncome();
@@ -72,6 +69,10 @@ let appData = {
     additionalExpensesValue.value = appData.addExpenses.join(', ');
     additionalIncomeValue.value = appData.addIncome.join(', ');
     targetMonthValue.value = Math.ceil(appData.getTargetMonth());
+    periodSelect.addEventListener('input', appData.changeIncomePeriodValue);
+    incomePeriodValue.value = appData.calcSavedMoney();
+  },
+  changeIncomePeriodValue: function(){
     incomePeriodValue.value = appData.calcSavedMoney();
   },
   addExpensesBlock: function() {
@@ -98,26 +99,6 @@ let appData = {
       }
     });
   },
-  // asking: function () {
-  //   if (confirm('Есть ли у вас дополнительный источник заработка?')) {
-  //     let itemIncome;
-  //     do {
-  //       itemIncome = prompt('Какой у вас дополнительный заработок?', 'Пишу картины');
-  //     } while (!isString(itemIncome));
-
-  //     let cashIncome;
-  //     do {
-  //       cashIncome = prompt('Сколько в месяц вы на этом зарабатываете?', 9999);
-  //     } while (!isNumber(cashIncome));
-  //     appData.income[itemIncome] = cashIncome;
-  //   }
-  //   let addExpenses;
-  //   do {
-  //     addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-  //   } while (!isString(addExpenses));
-  //   appData.addExpenses = addExpenses.toLowerCase().split(', ');
-  //   appData.deposit = confirm('Есть ли у вас депозит в банке?');
-  // },
   getExpenses: function(){
     expensesItems.forEach(function(item){
       let itemExpenses = item.querySelector('.expenses-title').value;
@@ -156,11 +137,6 @@ let appData = {
   },
   getTargetMonth: function () {
     return targetAmount.value / appData.budgetMonth;
-  //   if (monthForTarget > 0) {
-  //     return `Цель будет достигнута за ${monthForTarget} месяцев(-а)`;
-  //   } else {
-  //     return 'Цель не будет достигнута';
-  //   }
   },
   getBudget: function () {
     appData.budgetMonth = appData.budget + appData.incomeMonth - appData.getExpensesMonth();
@@ -190,21 +166,22 @@ let appData = {
   },
   calcSavedMoney: function () {
     return appData.budgetMonth * periodSelect.value;
+  },
+  changeRange: function(){
+    document.querySelector('.period-amount').textContent = periodSelect.value;
+  },
+  checkEmpty: function(){
+    if (salaryAmount.value === '') {
+      start.disabled = true;
+    } else {
+      start.disabled = false;
+    }
   }
 };
-
+salaryAmount.addEventListener('input', appData.checkEmpty);
+start.addEventListener('mouseover', appData.checkEmpty);
 start.addEventListener('click', appData.start);
+
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
-
-// console.log('Расходы за месяц:', appData.expensesMonth);
-// console.log(appData.getTargetMonth());
-// console.log(appData.getStatusIncome());
-
-// console.log('Наша программа включает в себя:');
-// for (let key in appData) {
-//   console.log(`${key}: ${appData[key]}`);
-// }
-
-// console.log(appData.addExpenses.map(item =>
-//   item.replace(item.charAt(0), item.charAt(0).toUpperCase())).join(', '));
+periodSelect.addEventListener('input', appData.changeRange);
