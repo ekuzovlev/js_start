@@ -28,19 +28,7 @@ let start = document.getElementById('start'),
     incomeItem = document.querySelectorAll('.income-items'),
     inputs = document.querySelectorAll('input');
 
-let isNumber = function (n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-};
 
-let isString = function (n) {
-  if (n === null) {
-    return false;
-  } else if (/\D/.test(n)) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 const AppData = function () {
   this.budgetDay= 0,
@@ -88,18 +76,7 @@ AppData.prototype.btnEnable = function(){
 };
 
 AppData.prototype.setNul = function(){
-  this.budget = 0;
-  this.budgetDay = 0;
-  this.budgetMonth = 0;
-  this.expensesMonth = 0;
-  this.income = {};
-  this.incomeMonth = 0;
-  this.addIncome = [];
-  this.expenses = {};
-  this.addExpenses =[];
-  this.deposit = false;
-  this.percentDeposit = 0;
-  this.moneyDeposit = 0;
+  Object.assign(this, new this.constructor());
 
   this.inputsToggle(false);
   this.removeBlock('.expenses-items');
@@ -277,6 +254,19 @@ AppData.prototype.inputsToggle = function (tap) {
   }
 };
 
+AppData.prototype.isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+AppData.prototype.isString = function (n) {
+  if (n === null) {
+    return false;
+  } else if (/\D/.test(n)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 AppData.prototype.eventListeners = function () {
   salaryAmount.addEventListener('input', this.checkEmpty.bind(this));
