@@ -84,6 +84,7 @@ class AppData {
     this.removeBlock('.expenses-items');
     this.removeBlock('.income-items');
     this.clearInputs(inputs);
+    this.removeCustomPercentInput();
 
     periodSelect.value = 0;
     periodAmount.textContent = 0;
@@ -122,6 +123,11 @@ class AppData {
     if(incomeItem.length === 3){
       incomePlus.style.display = 'none';
     }
+  }
+
+  removeCustomPercentInput () {
+    depositPercent.style.display = 'none';
+    depositBank.value = '';
   }
 
   removeBlock (block) {
@@ -269,9 +275,11 @@ inputsToggle (tap) {
   changePercent() {
     const valueSelect = this.value;
     if (valueSelect === 'other') {
-      // TODO: Д/з
+      depositPercent.style.display = 'inline-block';
+
     } else {
       depositPercent.value = valueSelect;
+      depositPercent.style.display = 'none';
     }
   }
 
@@ -291,6 +299,12 @@ inputsToggle (tap) {
     }
   }
 
+  checkDepositPercent () {
+    if (depositPercent.value > 100 || !this.isNumber(depositPercent.value)) {
+      alert('не то число или не число или число больше 100');
+    }
+  }
+
   eventListeners () {
     salaryAmount.addEventListener('input', this.checkEmpty.bind(this));
     start.addEventListener('mouseover', this.checkEmpty.bind(this));
@@ -300,6 +314,7 @@ inputsToggle (tap) {
     expensesPlus.addEventListener('click', this.addExpensesBlock.bind(this));
     periodSelect.addEventListener('input', this.changeRange.bind(this));
     depositCheck.addEventListener('change', this.depositHandler.bind(this));
+    depositPercent.addEventListener('input', this.checkDepositPercent.bind(this));
   }
 }
 
